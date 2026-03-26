@@ -1,284 +1,195 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LOOOK GID Sofubi Lotto — Display</title>
+<title>STUDIOBENZILLA LOTTO SYSTEM</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sarabun:wght@400;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap');
 
   :root {
-    --bg:      #ffffff;
-    --panel:   #f2f2f2;
-    --card:    #f8f8f8;
-    --border:  #e0e0e0;
-    --red:     #ff2d55;
-    --orange:  #ff9500;
-    --blue:    #007aff;
-    --green:   #34c759;
-    --purple:  #af52de;
-    --text:    #111111;
-    --muted:   #aaaaaa;
+    --bg:     #0d1117;
+    --panel:  #161b22;
+    --card:   #1c2128;
+    --border: #2d3748;
+    --accent: #4a9eff;
+    --gold:   #f0b429;
+    --green:  #3ecf8e;
+    --red:    #f85149;
+    --text:   #e6edf3;
+    --muted:  #4a5568;
+    --muted2: #718096;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body { width:100%; height:100%; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; overflow:hidden; }
 
-  html, body {
-    width: 100%; height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Sarabun', sans-serif;
-    overflow: hidden;
-  }
-
-  /* ══════════════════
+  /* ══════════════════════════════════
      SETUP OVERLAY
-  ══════════════════ */
+  ══════════════════════════════════ */
   #setup-overlay {
-    position: fixed; inset: 0;
-    background: rgba(255,255,255,0.98);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 300;
+    position:fixed; inset:0;
+    background:rgba(13,17,23,0.98);
+    display:flex; align-items:center; justify-content:center; z-index:300;
   }
   .setup-box {
-    background: #fff;
-    border: 2px solid var(--border);
-    border-radius: 28px;
-    padding: 48px;
-    width: min(480px, 90vw);
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.07);
+    background:var(--card); border:1px solid var(--border);
+    border-radius:24px; padding:52px 48px;
+    width:min(500px,92vw); text-align:center;
+    box-shadow:0 24px 80px rgba(0,0,0,0.6);
   }
-  .setup-t1 { font-family:'Bebas Neue',sans-serif; font-size:48px; color:var(--red); letter-spacing:5px; line-height:1; }
-  .setup-t2 { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:4px; margin-bottom:6px; }
-  .setup-t2 .og { color:var(--orange); } .setup-t2 .sf { color:var(--purple); } .setup-t2 .lt { color:var(--blue); }
-  .setup-sub { font-size:11px; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:36px; font-weight:700; }
-  .input-row { display:flex; gap:12px; align-items:flex-end; margin-bottom:18px; }
-  .ig { flex:1; text-align:left; }
-  .ig label { font-size:11px; color:var(--muted); letter-spacing:1px; display:block; margin-bottom:7px; text-transform:uppercase; font-weight:700; }
-  .ig input {
-    width:100%; padding:14px;
-    background:var(--panel); border:2px solid var(--border);
+  .st1 { font-family:'Bebas Neue',sans-serif; font-size:38px; letter-spacing:5px; line-height:1; color:var(--text); margin-bottom:4px; }
+  .st1 span { color:var(--accent); }
+  .st2 { font-size:10px; color:var(--muted2); letter-spacing:4px; text-transform:uppercase; margin-bottom:36px; font-weight:600; }
+
+  .field-block { margin-bottom:20px; text-align:left; }
+  .field-block label { font-size:10px; color:var(--muted2); letter-spacing:2px; display:block; margin-bottom:8px; text-transform:uppercase; font-weight:700; }
+
+  .range-row { display:flex; gap:10px; align-items:center; }
+  .range-row input {
+    flex:1; min-width:0; padding:13px 8px;
+    background:var(--panel); border:1px solid var(--border);
     border-radius:10px; color:var(--text);
     font-family:'Bebas Neue',sans-serif; font-size:26px;
     text-align:center; letter-spacing:2px; -webkit-appearance:none;
+    width:0;
   }
-  .ig input:focus { outline:none; border-color:var(--red); }
-  .rsep { color:var(--muted); font-size:26px; padding-bottom:12px; }
+  .range-row input:focus { outline:none; border-color:var(--accent); }
+  .rsep { color:var(--muted); font-size:22px; font-weight:700; flex-shrink:0; }
+
+  .quota-input {
+    width:100%; padding:13px;
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:10px; color:var(--gold);
+    font-family:'Bebas Neue',sans-serif; font-size:26px;
+    text-align:center; letter-spacing:3px; -webkit-appearance:none;
+  }
+  .quota-input:focus { outline:none; border-color:var(--gold); }
+
+  .setup-hint { font-size:11px; color:var(--muted); margin-top:8px; }
+
   .btn-start {
-    width:100%; padding:18px;
-    background:var(--red); color:#fff;
-    border:none; border-radius:12px;
+    width:100%; padding:18px; margin-top:8px;
+    background:var(--accent); color:#fff; border:none; border-radius:12px;
     font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:4px;
-    cursor:pointer; box-shadow:0 6px 24px rgba(255,45,85,0.28);
+    cursor:pointer; box-shadow:0 4px 24px rgba(74,158,255,0.3); transition:all 0.15s;
   }
   .btn-start:active { transform:scale(0.98); }
 
-  /* ══════════════════
+  /* ══════════════════════════════════
      APP SHELL
-  ══════════════════ */
-  #app {
-    display: grid;
-    grid-template-rows: 64px 1fr;
-    height: 100dvh;
-  }
+  ══════════════════════════════════ */
+  #app { display:grid; grid-template-rows:60px 1fr; height:100dvh; }
 
-  /* HEADER */
   .hdr {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 32px;
-    background: #fff;
-    border-bottom: 2px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 28px;
+    background:var(--panel); border-bottom:1px solid var(--border);
+    flex-shrink:0;
   }
-  .hdr-title { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:3px; line-height:1; }
-  .hdr-title .lo { color:var(--red); }
-  .hdr-title .gi { color:var(--orange); }
-  .hdr-title .so { color:var(--purple); }
-  .hdr-title .lt { color:var(--blue); }
-  .hdr-sub { font-size:10px; color:var(--muted); letter-spacing:3px; margin-top:2px; font-weight:700; }
+  .hdr-title { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:4px; color:var(--text); line-height:1; }
+  .hdr-title span { color:var(--accent); }
+  .hdr-sub { font-size:9px; color:var(--muted); letter-spacing:3px; margin-top:2px; font-weight:700; text-transform:uppercase; }
 
   .hdr-stats { display:flex; }
-  .hs {
-    padding: 0 24px;
-    border-left: 2px solid var(--border);
-    text-align: center;
-  }
-  .hs-v { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:2px; }
-  .hs-v.bl { color:var(--blue); } .hs-v.rd { color:var(--red); } .hs-v.gr { color:var(--green); }
-  .hs-l { font-size:10px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-weight:700; }
+  .hs { padding:0 20px; border-left:1px solid var(--border); text-align:center; }
+  .hs-v { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:2px; }
+  .hs-v.c1{color:var(--muted2);} .hs-v.c2{color:var(--gold);} .hs-v.c3{color:var(--green);} .hs-v.c4{color:var(--red);}
+  .hs-l { font-size:9px; color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-weight:700; }
 
-  /* ══════════════════
-     BODY — 3 columns
-     Left: drum+btn
-     Center: BIG number spotlight
-     Right: winner list
-  ══════════════════ */
+  /* ══════════════════════════════════
+     BODY — 35 : 65
+  ══════════════════════════════════ */
   .body {
-    display: grid;
-    grid-template-columns: 280px 1fr 1fr;
-    height: 100%; min-height: 0;
+    display:grid;
+    grid-template-columns: 35fr 65fr;
+    height:100%; min-height:0;
   }
 
-  /* ─── LEFT: controls ─── */
+  /* ── LEFT ── */
   .col-left {
-    border-right: 2px solid var(--border);
-    background: var(--card);
-    display: flex; flex-direction: column;
-    padding: 20px 18px; gap: 14px;
-    overflow: hidden;
+    border-right:1px solid var(--border);
+    background:var(--panel);
+    display:flex; flex-direction:column;
+    padding:22px 20px; gap:14px; overflow:hidden;
   }
 
   .drum-wrap {
-    flex: 1;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 12px;
-    background: #fff; border: 2px solid var(--border);
-    border-radius: 18px; padding: 18px;
-    position: relative; overflow: hidden;
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:14px;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:20px; padding:22px;
+    position:relative; overflow:hidden;
   }
+  .drum-wrap::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse at 50% 50%, rgba(74,158,255,0.04) 0%, transparent 65%);
+    pointer-events:none;
+  }
+
   .drum-ring {
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    border: 4px solid var(--border);
-    background: var(--panel);
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.3s, box-shadow 0.3s;
+    width:clamp(160px,18vw,220px); height:clamp(160px,18vw,220px);
+    border-radius:50%; border:4px solid var(--border); background:var(--bg);
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color 0.3s, box-shadow 0.3s;
   }
-  .drum-ring.spinning { border-color:var(--red); animation:rpulse 0.1s ease-in-out infinite; }
-  .drum-ring.won      { border-color:var(--red); box-shadow:0 0 40px rgba(255,45,85,0.2); }
-  .drum-ring.done     { border-color:var(--orange); }
-  @keyframes rpulse {
-    0%,100% { box-shadow:0 0 8px rgba(255,45,85,0.1); }
-    50%      { box-shadow:0 0 32px rgba(255,45,85,0.5); }
-  }
+  .drum-ring.spinning { border-color:var(--accent); animation:rpulse 0.15s ease-in-out infinite; }
+  .drum-ring.slowdown { border-color:var(--gold);   animation:rpulse-gold 0.5s ease-in-out infinite; }
+  .drum-ring.won      { border-color:var(--gold);   box-shadow:0 0 50px rgba(240,180,41,0.25); animation:none; }
+  .drum-ring.done     { border-color:var(--muted);  animation:none; }
+  @keyframes rpulse      { 0%,100%{box-shadow:0 0 8px rgba(74,158,255,0.1);} 50%{box-shadow:0 0 36px rgba(74,158,255,0.55);} }
+  @keyframes rpulse-gold { 0%,100%{box-shadow:0 0 8px rgba(240,180,41,0.1);} 50%{box-shadow:0 0 36px rgba(240,180,41,0.55);} }
+
   .drum-num {
     font-family:'Bebas Neue',sans-serif;
-    font-size:62px; color:var(--red); letter-spacing:3px; line-height:1;
-    transition: opacity 0.06s;
+    font-size:clamp(60px,8vw,88px); color:var(--accent); letter-spacing:4px; line-height:1;
+    transition:color 0.3s;
   }
-  .drum-num.idle { color:var(--muted); font-size:38px; }
-  .drum-num.roll { opacity:0.2; }
-  .drum-round { font-size:11px; color:var(--muted); letter-spacing:2px; min-height:16px; text-transform:uppercase; font-weight:700; }
+  .drum-num.idle  { color:var(--muted); font-size:clamp(36px,5vw,52px); }
+  .drum-num.roll  { opacity:0.15; }
+  .drum-num.slow  { opacity:0.55; color:var(--gold); }
+  .drum-num.final { color:var(--gold); }
+
+  .drum-round { font-size:10px; color:var(--muted2); letter-spacing:3px; min-height:14px; text-transform:uppercase; font-weight:700; }
+
+  .drum-banner {
+    background:var(--gold); color:#000;
+    font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:4px;
+    padding:7px 24px; border-radius:40px;
+    opacity:0; transform:translateY(8px) scale(0.95);
+    transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    white-space:nowrap;
+  }
+  .drum-banner.show { opacity:1; transform:translateY(0) scale(1); }
 
   .btn-spin {
-    width:100%; padding:14px;
-    background:var(--red); color:#fff;
-    border:none; border-radius:12px;
+    width:100%; padding:15px;
+    background:var(--accent); color:#fff; border:none; border-radius:12px;
     font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:4px;
-    cursor:pointer; box-shadow:0 4px 16px rgba(255,45,85,0.3);
-    transition: all 0.15s;
+    cursor:pointer; box-shadow:0 4px 20px rgba(74,158,255,0.25); transition:all 0.15s;
   }
   .btn-spin:active:not(:disabled) { transform:scale(0.97); box-shadow:none; }
   .btn-spin:disabled { background:var(--border); color:var(--muted); box-shadow:none; cursor:default; }
 
   .btn-reset {
-    width:100%; padding:9px;
-    background:transparent; color:var(--muted);
-    border:1.5px solid var(--border); border-radius:9px;
-    font-family:'Sarabun',sans-serif; font-size:12px; font-weight:700;
-    cursor:pointer;
+    width:100%; padding:10px;
+    background:transparent; color:var(--muted2);
+    border:1px solid var(--border); border-radius:8px;
+    font-family:'Inter',sans-serif; font-size:11px; font-weight:700;
+    cursor:pointer; letter-spacing:1px; text-transform:uppercase; transition:all 0.15s;
   }
   .btn-reset:active { color:var(--red); border-color:var(--red); }
 
-  .recent-box { display:flex; flex-direction:column; gap:6px; }
-  .sec-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:700; }
-  .ri {
-    display:flex; align-items:center; gap:10px;
-    background:#fff; border:1.5px solid var(--border);
-    border-radius:9px; padding:8px 12px;
-    animation:sli 0.3s ease;
-  }
-  .ri.fresh { border-color:var(--red); background:#fff5f7; }
-  @keyframes sli { from { opacity:0; transform:translateX(-8px); } to { opacity:1; transform:translateX(0); } }
-  .ri-n { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--red); min-width:52px; letter-spacing:2px; }
-  .ri-r { font-size:11px; font-weight:700; }
-  .ri-t { font-size:10px; color:var(--muted); }
-
-  /* ─── CENTER: BIG spotlight ─── */
-  .col-center {
-    border-right: 2px solid var(--border);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 12px;
-    background: #fff;
-    padding: 24px;
-    position: relative; overflow: hidden;
-  }
-  /* subtle radial bg */
-  .col-center::before {
-    content:''; position:absolute; inset:0;
-    background: radial-gradient(ellipse at 50% 50%, rgba(255,45,85,0.04) 0%, transparent 65%);
-    pointer-events:none;
-  }
-
-  .spot-label {
-    font-size:12px; letter-spacing:4px; text-transform:uppercase;
-    color:var(--muted); font-weight:700;
-  }
-
-  /* BIG circle */
-  .spot-ring {
-    width: min(38vw, 340px);
-    height: min(38vw, 340px);
-    border-radius: 50%;
-    border: 5px solid var(--border);
-    background: var(--panel);
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    position: relative; z-index: 1;
-  }
-  .spot-ring.spinning {
-    border-color:var(--red);
-    animation:spulse 0.1s ease-in-out infinite;
-  }
-  .spot-ring.won {
-    border-color:var(--red);
-    box-shadow: 0 0 80px rgba(255,45,85,0.2), 0 0 160px rgba(255,45,85,0.07);
-  }
-  .spot-ring.done { border-color:var(--orange); }
-  @keyframes spulse {
-    0%,100% { box-shadow:0 0 20px rgba(255,45,85,0.1); }
-    50%      { box-shadow:0 0 70px rgba(255,45,85,0.5); }
-  }
-
-  .spot-num {
-    font-family:'Bebas Neue',sans-serif;
-    font-size: min(18vw, 160px);
-    color: var(--red); letter-spacing:6px; line-height:1;
-    transition: opacity 0.06s;
-  }
-  .spot-num.idle { color:var(--muted); font-size: min(9vw, 80px); }
-  .spot-num.roll { opacity:0.2; }
-
-  .spot-round {
-    font-size:14px; color:var(--muted); letter-spacing:3px;
-    min-height:20px; text-transform:uppercase; font-weight:700;
-  }
-
-  /* LATEST banner below ring */
-  .spot-banner {
-    background:var(--red); color:#fff;
-    font-family:'Bebas Neue',sans-serif;
-    font-size:18px; letter-spacing:4px;
-    padding:8px 32px; border-radius:40px;
-    opacity:0; transform:translateY(8px);
-    transition:all 0.3s ease;
-    white-space:nowrap;
-  }
-  .spot-banner.show { opacity:1; transform:translateY(0); }
-
-  /* ─── RIGHT: winner list ─── */
+  /* ── RIGHT ── */
   .col-right {
-    display: flex; flex-direction: column;
-    padding: 18px 20px; gap: 12px; min-height: 0;
-    background: #fff;
+    display:flex; flex-direction:column;
+    padding:18px 20px; gap:10px; min-height:0;
+    background:var(--bg);
   }
-  .rh {
-    display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
-  }
-  .winner-count {
-    font-family:'Bebas Neue',sans-serif; font-size:20px;
-    color:var(--red); letter-spacing:2px;
-  }
+  .rh { display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+  .sec-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:700; }
+  .winner-count { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--gold); letter-spacing:2px; }
 
   .wscroll {
     flex:1; overflow-y:auto; min-height:0;
@@ -286,61 +197,84 @@
   }
   .w-empty {
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    height:100%; gap:10px; color:var(--muted);
+    height:100%; gap:12px; color:var(--muted);
   }
-  .w-empty-icon { font-size:44px; opacity:0.18; }
-  .w-empty-text { font-size:12px; letter-spacing:3px; font-weight:700; text-transform:uppercase; }
+  .w-empty-icon { font-size:40px; opacity:0.12; }
+  .w-empty-text { font-size:11px; letter-spacing:3px; font-weight:700; text-transform:uppercase; }
 
-  /* 2-col grid, large numbers */
-  .wlist {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:8px; align-content:start;
-  }
+  /* winner grid */
+  .wlist { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; align-content:start; }
+
   .wrow {
-    background:#fff; border:2px solid var(--border);
+    background:var(--card); border:1px solid var(--border);
     border-radius:14px; padding:12px 14px;
-    display:flex; align-items:center; gap:10px;
+    display:flex; flex-direction:column; gap:8px;
     animation:win-in 0.35s cubic-bezier(0.34,1.5,0.64,1);
-    transition:all 0.2s;
+    transition:border-color 0.2s, background 0.2s;
+    position:relative;
   }
-  .wrow.latest  { border-color:var(--red); background:#fff5f7; box-shadow:0 4px 16px rgba(255,45,85,0.1); }
-  .wrow.waived  { border-color:var(--border); background:var(--panel); opacity:0.5; }
-  @keyframes win-in {
-    from { opacity:0; transform:scale(0.88) translateY(-4px); }
-    to   { opacity:1; transform:scale(1) translateY(0); }
-  }
+  .wrow.latest  { border-color:var(--gold); background:rgba(240,180,41,0.05); box-shadow:0 2px 14px rgba(240,180,41,0.1); }
+  .wrow.waived  { border-color:var(--border); background:var(--panel); opacity:0.38; }
+  .wrow.claimed { border-color:var(--green); background:rgba(62,207,142,0.05); }
+  @keyframes win-in { from{opacity:0;transform:scale(0.88) translateY(-4px);}to{opacity:1;transform:scale(1) translateY(0);} }
 
-  .wr-rank { font-family:'Bebas Neue',sans-serif; font-size:13px; color:var(--muted); letter-spacing:1px; min-width:26px; }
-  .wr-num  {
-    font-family:'Bebas Neue',sans-serif;
-    font-size:44px; color:var(--red);
-    letter-spacing:2px; line-height:1; flex:1;
-  }
-  .wrow.waived .wr-num { color:var(--muted); text-decoration:line-through; }
+  /* top row: rank + number */
+  .wrow-top { display:flex; align-items:center; gap:8px; }
+  .wr-rank { font-family:'Bebas Neue',sans-serif; font-size:12px; color:var(--muted); letter-spacing:1px; }
+  .wr-num  { font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--accent); letter-spacing:2px; line-height:1; flex:1; }
+  .wrow.latest  .wr-num { color:var(--gold); }
+  .wrow.claimed .wr-num { color:var(--green); }
+  .wrow.waived  .wr-num { color:var(--muted); text-decoration:line-through; }
 
-  .wr-right { display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
-  .badge-new    { font-size:9px; font-weight:800; color:#fff; background:var(--red); padding:2px 7px; border-radius:20px; letter-spacing:1px; white-space:nowrap; }
-  .badge-waived { font-size:9px; font-weight:800; color:var(--muted); background:var(--panel); border:1.5px solid var(--border); padding:2px 7px; border-radius:20px; white-space:nowrap; }
+  /* countdown */
+  .wr-timer {
+    font-family:'Bebas Neue',sans-serif; font-size:13px;
+    letter-spacing:1px; color:var(--muted2);
+    display:flex; align-items:center; gap:5px;
+  }
+  .wr-timer .tval { font-size:15px; }
+  .wr-timer.urgent .tval { color:var(--red); }
+  .wr-timer.expired { color:var(--red); font-size:12px; letter-spacing:1px; }
+  .wr-timer.done-timer { color:var(--green); }
+
+  /* action buttons row */
+  .wr-actions { display:flex; gap:6px; }
+  .btn-claim {
+    flex:1; font-size:9px; font-weight:700; color:#000;
+    background:var(--green); border:none;
+    border-radius:6px; padding:5px 8px; cursor:pointer;
+    white-space:nowrap; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.15s;
+  }
+  .btn-claim:active { opacity:0.8; }
   .bw {
-    font-size:10px; font-weight:700; color:var(--muted);
-    background:transparent; border:1.5px solid var(--border);
-    border-radius:7px; padding:4px 9px; cursor:pointer; white-space:nowrap;
+    flex:1; font-size:9px; font-weight:700; color:var(--muted2);
+    background:transparent; border:1px solid var(--border);
+    border-radius:6px; padding:5px 8px; cursor:pointer;
+    white-space:nowrap; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.15s;
   }
   .bw:active { color:var(--red); border-color:var(--red); }
   .br {
-    font-size:10px; font-weight:700; color:var(--green);
-    background:transparent; border:1.5px solid var(--green);
-    border-radius:7px; padding:4px 9px; cursor:pointer; white-space:nowrap;
+    flex:1; font-size:9px; font-weight:700; color:var(--accent);
+    background:transparent; border:1px solid var(--accent);
+    border-radius:6px; padding:5px 8px; cursor:pointer;
+    white-space:nowrap; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.15s;
   }
-  .br:active { background:#f0fff4; }
+  .br:active { background:rgba(74,158,255,0.08); }
+  .b-reset-card {
+    flex:1; font-size:9px; font-weight:700; color:var(--muted2);
+    background:transparent; border:1px solid var(--muted);
+    border-radius:6px; padding:5px 8px; cursor:pointer;
+    white-space:nowrap; text-transform:uppercase; letter-spacing:0.5px; transition:all 0.15s;
+  }
+  .b-reset-card:active { color:var(--text); border-color:var(--text); }
+
+  .badge-latest  { font-size:9px; font-weight:800; color:#000; background:var(--gold);  padding:2px 7px; border-radius:20px; letter-spacing:1px; white-space:nowrap; text-transform:uppercase; display:inline-block; }
+  .badge-waived  { font-size:9px; font-weight:700; color:var(--muted2); background:var(--panel); border:1px solid var(--border); padding:2px 7px; border-radius:20px; white-space:nowrap; display:inline-block; }
+  .badge-claimed { font-size:9px; font-weight:800; color:#000; background:var(--green); padding:2px 7px; border-radius:20px; letter-spacing:1px; white-space:nowrap; text-transform:uppercase; display:inline-block; }
 
   /* CONFETTI */
   .cp { position:fixed; pointer-events:none; z-index:10000; border-radius:2px; animation:cff linear forwards; }
-  @keyframes cff {
-    from { opacity:1; transform:translateY(-20px) rotate(0deg); }
-    to   { opacity:0; transform:translateY(100vh) rotate(720deg); }
-  }
+  @keyframes cff { from{opacity:1;transform:translateY(-20px) rotate(0deg);}to{opacity:0;transform:translateY(100vh) rotate(720deg);} }
   .hidden { display:none !important; }
 </style>
 </head>
@@ -349,78 +283,70 @@
 <!-- SETUP -->
 <div id="setup-overlay">
   <div class="setup-box">
-    <div class="setup-t1">LOOOK</div>
-    <div class="setup-t2"><span class="og">GID</span> <span class="sf">Sofubi</span> <span class="lt">Lotto</span></div>
-    <div class="setup-sub">Wristband Draw · TTE 2026</div>
-    <div class="input-row">
-      <div class="ig"><label>เริ่มต้น</label><input type="number" id="r-start" value="1" min="1"></div>
-      <div class="rsep">—</div>
-      <div class="ig"><label>สิ้นสุด</label><input type="number" id="r-end" value="300" min="1"></div>
+    <div class="st1">STUDIOBENZILLA <span>LOTTO</span></div>
+    <div class="st2">Wristband Draw System · TTE 2026</div>
+
+    <div class="field-block">
+      <label>Wristband Number Range</label>
+      <div class="range-row">
+        <input type="number" id="r-start" value="1" min="1" placeholder="1">
+        <span class="rsep">—</span>
+        <input type="number" id="r-end" value="200" min="1" placeholder="200">
+      </div>
+      <div class="setup-hint">e.g. 1 – 200 for wristbands #001 to #200</div>
     </div>
-    <button class="btn-start" onclick="initPool()">เริ่มจับสลาก</button>
+
+    <div class="field-block">
+      <label>Number of Winners (Quota)</label>
+      <input type="number" id="r-quota" class="quota-input" value="20" min="1" placeholder="20">
+      <div class="setup-hint">Max winners that can be drawn from the pool</div>
+    </div>
+
+    <button class="btn-start" onclick="initPool()">Start Draw</button>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
 
-  <!-- HEADER -->
   <div class="hdr">
     <div>
-      <div class="hdr-title">
-        <span class="lo">LOOOK</span>&nbsp;
-        <span class="gi">GID</span>&nbsp;
-        <span class="so">Sofubi</span>&nbsp;
-        <span class="lt">Lotto</span>
-      </div>
+      <div class="hdr-title">STUDIOBENZILLA &nbsp;<span>LOTTO SYSTEM</span></div>
       <div class="hdr-sub">Wristband Draw · TTE 2026</div>
     </div>
     <div class="hdr-stats">
-      <div class="hs"><div class="hs-v bl" id="s-total">—</div><div class="hs-l">ทั้งหมด</div></div>
-      <div class="hs"><div class="hs-v rd" id="s-drawn">0</div><div class="hs-l">จับแล้ว</div></div>
-      <div class="hs"><div class="hs-v gr" id="s-remain">—</div><div class="hs-l">คงเหลือ</div></div>
+      <div class="hs"><div class="hs-v c1" id="s-pool">—</div><div class="hs-l">Pool</div></div>
+      <div class="hs"><div class="hs-v c2" id="s-drawn">0</div><div class="hs-l">Drawn</div></div>
+      <div class="hs"><div class="hs-v c3" id="s-quota">—</div><div class="hs-l">Quota</div></div>
+      <div class="hs"><div class="hs-v c4" id="s-slots">—</div><div class="hs-l">Slots Left</div></div>
     </div>
   </div>
 
-  <!-- BODY -->
   <div class="body">
 
-    <!-- LEFT: drum controls -->
+    <!-- LEFT -->
     <div class="col-left">
       <div class="drum-wrap">
         <div class="drum-ring" id="drum-ring">
-          <div class="drum-num idle" id="drum-num">???</div>
+          <div class="drum-num idle" id="drum-num">—</div>
         </div>
         <div class="drum-round" id="drum-round"></div>
+        <div class="drum-banner" id="drum-banner">Purchase Right Granted ✓</div>
       </div>
-      <button class="btn-spin" id="btn-spin" onclick="spin()">จับสลาก</button>
-      <button class="btn-reset" onclick="resetPool()">↺ รีเซ็ต Pool</button>
-      <div class="recent-box" id="recent-box" style="display:none">
-        <div class="sec-label" style="margin-bottom:5px">รายการล่าสุด</div>
-        <div id="recent-list"></div>
-      </div>
+      <button class="btn-spin" id="btn-spin" onclick="spin()">Draw</button>
+      <button class="btn-reset" onclick="resetPool()">↺ Reset Pool</button>
     </div>
 
-    <!-- CENTER: big spotlight -->
-    <div class="col-center">
-      <div class="spot-label">หมายเลขที่ได้รับสิทธิ์</div>
-      <div class="spot-ring" id="spot-ring">
-        <div class="spot-num idle" id="spot-num">???</div>
-      </div>
-      <div class="spot-round" id="spot-round"></div>
-      <div class="spot-banner" id="spot-banner">ได้รับสิทธิ์ซื้อ ✓</div>
-    </div>
-
-    <!-- RIGHT: winner list -->
+    <!-- RIGHT -->
     <div class="col-right">
       <div class="rh">
-        <div class="sec-label">ผู้ได้รับสิทธิ์ซื้อ</div>
-        <div class="winner-count" id="winner-count">0 คน</div>
+        <div class="sec-label">Winners</div>
+        <div class="winner-count" id="winner-count">0 / 0 winners</div>
       </div>
       <div class="wscroll">
         <div class="w-empty" id="w-empty">
-          <div class="w-empty-icon">🎰</div>
-          <div class="w-empty-text">กดจับสลากเพื่อเริ่ม</div>
+          <div class="w-empty-icon">◎</div>
+          <div class="w-empty-text">Press Draw to begin</div>
         </div>
         <div class="wlist" id="wlist" style="display:none"></div>
       </div>
@@ -430,162 +356,349 @@
 </div>
 
 <script>
+const COUNTDOWN_SECS = 5 * 60; // 5 minutes
+
 let pool=[], drawn=[], allNums=[], latestNum=null, isSpinning=false;
-const pad = n => String(n).padStart(3,'0');
-const ts  = () => new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+let quota=20;
+let timerInterval=null;
+
+const pad  = n => String(n).padStart(3,'0');
+const ts   = () => new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+const fmtT = s => {
+  if(s<=0) return '0:00';
+  const m=Math.floor(s/60), sec=s%60;
+  return `${m}:${String(sec).padStart(2,'0')}`;
+};
 
 function initPool(){
   const s=parseInt(document.getElementById('r-start').value);
   const e=parseInt(document.getElementById('r-end').value);
-  if(isNaN(s)||isNaN(e)||s<1||e<s){alert('กรุณาตรวจสอบช่วงหมายเลข');return;}
+  const q=parseInt(document.getElementById('r-quota').value);
+  if(isNaN(s)||isNaN(e)||s<1||e<s){alert('Please check the number range.');return;}
+  if(isNaN(q)||q<1){alert('Please enter a valid quota.');return;}
+  if(q>e-s+1){alert(`Quota (${q}) cannot exceed pool size (${e-s+1}).`);return;}
+
+  quota=q;
   allNums=[]; for(let i=s;i<=e;i++) allNums.push(i);
   pool=[...allNums]; drawn=[]; latestNum=null;
   document.getElementById('setup-overlay').classList.add('hidden');
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval=setInterval(tickTimers,1000);
   render();
+}
+
+/* ── timer tick every second ── */
+function tickTimers(){
+  const now=Date.now();
+  let needsRender=false;
+  drawn.forEach(d=>{
+    if(d.claimed||d.waived) return;
+    const elapsed=Math.floor((now-d.drawnAt)/1000);
+    const remaining=COUNTDOWN_SECS-elapsed;
+    if(remaining<=0 && !d.expired){
+      d.expired=true; d.waived=true; needsRender=true;
+    } else if(remaining>0){
+      needsRender=true;
+    }
+  });
+  if(needsRender) renderTimers();
+}
+
+/* timer tick every second */
+function tickTimers(){
+  const now=Date.now();
+  let needFullRender=false;
+
+  drawn.forEach(d=>{
+    if(d.claimed||d.waived) return;
+    const elapsed=Math.floor((now-d.drawnAt)/1000);
+    const rem=COUNTDOWN_SECS-elapsed;
+
+    if(rem<=0){
+      // auto-waive now
+      d.waived=true;
+      d.expired=true;
+      needFullRender=true;
+    } else {
+      // lightweight update of just the timer element
+      const el=document.getElementById('timer-'+d.num);
+      if(!el) return;
+      el.className='wr-timer'+(rem<=60?' urgent':'');
+      el.innerHTML=`<span>⏱</span><span class="tval">${fmtT(rem)}</span><span style="font-size:10px;color:var(--muted2)"> remaining</span>`;
+    }
+  });
+
+  if(needFullRender) render();
+  else updateStats();
+}
+
+function updateStats(){
+  const active=drawn.filter(d=>!d.waived);
+  const slots=Math.max(0, quota-active.length);
+  document.getElementById('s-pool').textContent  = allNums.length;
+  document.getElementById('s-drawn').textContent = drawn.length;
+  document.getElementById('s-quota').textContent = quota;
+  document.getElementById('s-slots').textContent = slots;
+  document.getElementById('winner-count').textContent = `${active.length} / ${quota} winners`;
+
+  const btn=document.getElementById('btn-spin');
+  const slotsLeft=quota-active.length;
+  btn.disabled=pool.length===0||isSpinning||slotsLeft<=0;
+  if(slotsLeft<=0&&pool.length>0){ btn.textContent='Quota Full'; }
+  else if(pool.length===0){ btn.textContent='Pool Empty'; }
+  else { btn.textContent='Draw'; btn.disabled=isSpinning; }
 }
 
 function waive(num){
   const d=drawn.find(x=>x.num===num);
-  if(!d||d.waived) return;
-  if(!confirm(`สละสิทธิ์หมายเลข ${pad(num)} ?`)) return;
+  if(!d||d.waived||d.claimed) return;
+  if(!confirm(`Manually waive right for #${pad(num)}?`)) return;
   d.waived=true; render();
 }
 function restore(num){
   const d=drawn.find(x=>x.num===num);
   if(!d) return;
-  d.waived=false; render();
+  d.waived=false; d.expired=false; d.drawnAt=Date.now(); render();
+}
+function claim(num){
+  const d=drawn.find(x=>x.num===num);
+  if(!d||d.claimed||d.waived) return;
+  d.claimed=true; render();
+}
+
+function resetCard(num){
+  const d=drawn.find(x=>x.num===num);
+  if(!d) return;
+  d.waived=false; d.claimed=false; d.expired=false;
+  d.drawnAt=Date.now(); // reset timer
+  render();
 }
 
 function render(){
-  const active=drawn.filter(d=>!d.waived);
-  document.getElementById('s-total').textContent  = allNums.length;
-  document.getElementById('s-drawn').textContent  = drawn.length;
-  document.getElementById('s-remain').textContent = pool.length;
-  document.getElementById('winner-count').textContent = active.length+' คน';
+  updateStats();
 
-  const btn=document.getElementById('btn-spin');
-  btn.disabled=pool.length===0||isSpinning;
-  if(pool.length===0){ btn.textContent='จับครบแล้ว!'; document.getElementById('drum-ring').classList.add('done'); }
-
-  // winner list
   const wl=document.getElementById('wlist');
   const we=document.getElementById('w-empty');
-  if(drawn.length===0){ we.style.display='flex'; wl.style.display='none'; }
-  else {
-    we.style.display='none'; wl.style.display='grid';
-    wl.innerHTML='';
-    const sorted=[
-      ...[...drawn].filter(d=>!d.waived).reverse(),
-      ...[...drawn].filter(d=>d.waived).reverse()
-    ];
-    sorted.forEach(d=>{
-      const isL=d.num===latestNum&&!d.waived;
-      const row=document.createElement('div');
-      row.className='wrow'+(isL?' latest':'')+(d.waived?' waived':'');
-      row.innerHTML=`
+  if(drawn.length===0){ we.style.display='flex'; wl.style.display='none'; return; }
+
+  we.style.display='none'; wl.style.display='grid';
+  wl.innerHTML='';
+
+  const sorted=[
+    ...[...drawn].filter(d=>!d.waived&&!d.claimed).reverse(),
+    ...[...drawn].filter(d=>d.claimed).reverse(),
+    ...[...drawn].filter(d=>d.waived).reverse(),
+  ];
+
+  sorted.forEach(d=>{
+    const isL=d.num===latestNum&&!d.waived&&!d.claimed;
+    const elapsed=Math.floor((Date.now()-d.drawnAt)/1000);
+    const rem=Math.max(0,COUNTDOWN_SECS-elapsed);
+
+    const row=document.createElement('div');
+    row.id='wrow-'+d.num;
+    row.className='wrow'+(isL?' latest':'')+(d.waived?' waived':'')+(d.claimed?' claimed':'');
+
+    // badge
+    let badge='';
+    if(isL)            badge=`<div class="badge-latest">Latest</div>`;
+    else if(d.claimed) badge=`<div class="badge-claimed">Claimed ✓</div>`;
+    else if(d.waived)  badge=`<div class="badge-waived">Waived</div>`;
+
+    // timer
+    let timerHtml='';
+    if(!d.waived&&!d.claimed){
+      const urgent=rem<=60?'urgent':'';
+      timerHtml=`<div class="wr-timer ${urgent}" id="timer-${d.num}"><span>⏱</span><span class="tval">${fmtT(rem)}</span><span style="font-size:10px;color:var(--muted2)"> remaining</span></div>`;
+    } else {
+      timerHtml=`<div id="timer-${d.num}"></div>`;
+    }
+
+    // actions — always show Reset + context button
+    let actions='';
+    if(!d.waived&&!d.claimed){
+      actions=`
+        <div class="wr-actions">
+          <button class="btn-claim" onclick="claim(${d.num})">Claimed</button>
+          <button class="bw" onclick="waive(${d.num})">Waive</button>
+        </div>`;
+    } else {
+      // claimed or waived — show Restore + Reset
+      actions=`
+        <div class="wr-actions">
+          <button class="br" onclick="restore(${d.num})">Restore</button>
+          <button class="b-reset-card" onclick="resetCard(${d.num})">Reset</button>
+        </div>`;
+    }
+
+    row.innerHTML=`
+      <div class="wrow-top">
         <div class="wr-rank">#${d.round}</div>
         <div class="wr-num">${pad(d.num)}</div>
-        <div class="wr-right">
-          ${isL?'<div class="badge-new">ล่าสุด</div>':''}
-          ${d.waived
-            ?`<div class="badge-waived">สละสิทธิ์</div><button class="br" onclick="restore(${d.num})">คืนสิทธิ์</button>`
-            :`<button class="bw" onclick="waive(${d.num})">สละสิทธิ์</button>`
-          }
-        </div>`;
-      wl.appendChild(row);
-    });
-  }
-
-  // recent (left)
-  const rb=document.getElementById('recent-box');
-  const rl=document.getElementById('recent-list');
-  if(drawn.length>0){
-    rb.style.display='flex'; rb.style.flexDirection='column';
-    rl.innerHTML='';
-    [...drawn].reverse().slice(0,3).forEach((d,i)=>{
-      const el=document.createElement('div');
-      el.className='ri'+(i===0&&!d.waived?' fresh':'');
-      el.innerHTML=`<div class="ri-n" style="${d.waived?'color:var(--muted);text-decoration:line-through':''}">${pad(d.num)}</div><div><div class="ri-r">${d.waived?'สละสิทธิ์':'ได้สิทธิ์ ✓ รอบที่ '+d.round}</div><div class="ri-t">${d.time}</div></div>`;
-      rl.appendChild(el);
-    });
-  } else { rb.style.display='none'; }
+        ${badge}
+      </div>
+      ${timerHtml}
+      ${actions}
+    `;
+    wl.appendChild(row);
+  });
 }
 
 function spin(){
   if(pool.length===0||isSpinning) return;
+  const active=drawn.filter(d=>!d.waived);
+  if(active.length>=quota){ alert('Quota is full!'); return; }
+
   isSpinning=true;
   document.getElementById('btn-spin').disabled=true;
 
-  // both rings sync
-  const ring  = document.getElementById('drum-ring');
-  const sring = document.getElementById('spot-ring');
-  const numEl = document.getElementById('drum-num');
-  const snumEl= document.getElementById('spot-num');
-  const banner= document.getElementById('spot-banner');
+  const ring  =document.getElementById('drum-ring');
+  const numEl =document.getElementById('drum-num');
+  const banner=document.getElementById('drum-banner');
 
-  ring.classList.remove('won','done');   ring.classList.add('spinning');
-  sring.classList.remove('won','done');  sring.classList.add('spinning');
-  numEl.classList.remove('idle');  numEl.classList.add('roll');
-  snumEl.classList.remove('idle'); snumEl.classList.add('roll');
+  ring.classList.remove('won','done','slowdown'); ring.classList.add('spinning');
+  numEl.className='drum-num roll';
   banner.classList.remove('show');
   document.getElementById('drum-round').textContent='';
-  document.getElementById('spot-round').textContent='';
 
   const idx=Math.floor(Math.random()*pool.length);
   const winner=pool[idx];
-  const total=22+Math.floor(Math.random()*14);
-  let t=0;
-  const iv=setInterval(()=>{
-    const fake=pad(pool[Math.floor(Math.random()*pool.length)]);
-    numEl.textContent=fake; snumEl.textContent=fake;
-    if(++t>=total){ clearInterval(iv); reveal(winner,idx,ring,sring,numEl,snumEl,banner); }
-  },70);
+
+  const phases=[
+    {count:18,interval:40 },
+    {count:12,interval:75 },
+    {count:8, interval:140},
+    {count:5, interval:260},
+    {count:3, interval:420},
+  ];
+  let phaseIdx=0, tickInPhase=0;
+
+  function tick(){
+    const phase=phases[phaseIdx];
+    if(phaseIdx>=2&&!ring.classList.contains('slowdown')){
+      ring.classList.remove('spinning'); ring.classList.add('slowdown');
+      numEl.className='drum-num slow';
+    }
+    numEl.textContent=pad(pool[Math.floor(Math.random()*pool.length)]);
+    tickInPhase++;
+    if(tickInPhase>=phase.count){
+      phaseIdx++; tickInPhase=0;
+      if(phaseIdx>=phases.length){ reveal(winner,idx,ring,numEl,banner); return; }
+    }
+    setTimeout(tick,phases[phaseIdx].interval);
+  }
+  setTimeout(tick,phases[0].interval);
 }
 
-function reveal(winner,idx,ring,sring,numEl,snumEl,banner){
+function reveal(winner,idx,ring,numEl,banner){
   pool.splice(idx,1);
-  drawn.push({num:winner,round:drawn.length+1,time:ts()});
+  drawn.push({num:winner, round:drawn.length+1, time:ts(), drawnAt:Date.now(), waived:false, claimed:false, expired:false});
   latestNum=winner;
 
-  const ns=pad(winner);
-  numEl.textContent=ns; snumEl.textContent=ns;
-  numEl.classList.remove('roll'); snumEl.classList.remove('roll');
-  ring.classList.remove('spinning');  ring.classList.add('won');
-  sring.classList.remove('spinning'); sring.classList.add('won');
-
-  const rnd=`รอบที่ ${drawn.length}`;
-  document.getElementById('drum-round').textContent=rnd;
-  document.getElementById('spot-round').textContent=rnd;
-
-  // show banner with delay
-  setTimeout(()=>banner.classList.add('show'), 200);
+  numEl.textContent=pad(winner);
+  numEl.className='drum-num final';
+  ring.classList.remove('spinning','slowdown'); ring.classList.add('won');
+  document.getElementById('drum-round').textContent=`Round ${drawn.length}`;
+  setTimeout(()=>banner.classList.add('show'),300);
 
   confetti(); isSpinning=false; render();
 }
 
 function resetPool(){
-  if(!confirm('รีเซ็ต Pool ทั้งหมด?')) return;
+  if(!confirm('Reset everything? All draw data will be cleared.')) return;
+  if(timerInterval) clearInterval(timerInterval);
   document.getElementById('setup-overlay').classList.remove('hidden');
-  ['drum-num','spot-num'].forEach(id=>{
-    const el=document.getElementById(id);
-    el.textContent='???'; el.className=id==='drum-num'?'drum-num idle':'spot-num idle';
-  });
-  ['drum-ring','spot-ring'].forEach(id=>document.getElementById(id).classList.remove('won','spinning','done'));
+  const dn=document.getElementById('drum-num');
+  dn.textContent='—'; dn.className='drum-num idle';
+  document.getElementById('drum-ring').classList.remove('won','spinning','done','slowdown');
   document.getElementById('drum-round').textContent='';
-  document.getElementById('spot-round').textContent='';
-  document.getElementById('spot-banner').classList.remove('show');
-  pool=[]; drawn=[]; allNums=[]; latestNum=null;
+  document.getElementById('drum-banner').classList.remove('show');
+  pool=[]; drawn=[]; allNums=[]; latestNum=null; quota=20;
 }
 
 function confetti(){
-  const cols=['#ff2d55','#ff9500','#007aff','#34c759','#af52de','#ffcc00'];
-  for(let i=0;i<70;i++){
-    const el=document.createElement('div');
-    el.className='cp';
-    el.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${cols[Math.floor(Math.random()*cols.length)]};width:${8+Math.random()*10}px;height:${8+Math.random()*10}px;animation-duration:${1.8+Math.random()*1.8}s;animation-delay:${Math.random()*0.5}s;transform:rotate(${Math.random()*360}deg);`;
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),4000);
+  // Ring burst from center of drum
+  const ring = document.getElementById('drum-ring');
+  const rect = ring.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top  + rect.height/2;
+
+  const cols=['#4a9eff','#f0b429','#3ecf8e','#a78bfa','#e6edf3'];
+  const shapes=['circle','ring','line'];
+
+  // Wave 1: tight ring burst (36 particles)
+  for(let i=0;i<36;i++){
+    const angle=(i/36)*Math.PI*2;
+    const speed=120+Math.random()*180;
+    const dx=Math.cos(angle)*speed;
+    const dy=Math.sin(angle)*speed;
+    const col=cols[~~(Math.random()*cols.length)];
+    const shape=shapes[~~(Math.random()*shapes.length)];
+    const size=shape==='line'?[3,14]:[6+Math.random()*6,6+Math.random()*6];
+    spawnParticle(cx,cy,dx,dy,col,size,0,800+Math.random()*400);
   }
+
+  // Wave 2: scatter burst (24 particles, slight delay)
+  setTimeout(()=>{
+    for(let i=0;i<24;i++){
+      const angle=Math.random()*Math.PI*2;
+      const speed=60+Math.random()*260;
+      const dx=Math.cos(angle)*speed;
+      const dy=Math.sin(angle)*speed;
+      const col=cols[~~(Math.random()*cols.length)];
+      const size=[4+Math.random()*8,4+Math.random()*8];
+      spawnParticle(cx,cy,dx,dy,col,size,0,1000+Math.random()*600);
+    }
+  },80);
+
+  // Wave 3: upward streaks
+  setTimeout(()=>{
+    for(let i=0;i<16;i++){
+      const angle=-Math.PI/2 + (Math.random()-0.5)*Math.PI*0.9;
+      const speed=200+Math.random()*300;
+      const dx=Math.cos(angle)*speed;
+      const dy=Math.sin(angle)*speed;
+      const col=cols[~~(Math.random()*cols.length)];
+      spawnParticle(cx,cy,dx,dy,col,[3,16+Math.random()*10],0,1200+Math.random()*600);
+    }
+  },160);
+}
+
+function spawnParticle(cx,cy,dx,dy,color,size,delay,duration){
+  const el=document.createElement('div');
+  el.style.cssText=`
+    position:fixed;
+    left:${cx}px; top:${cy}px;
+    width:${size[0]}px; height:${size[1]}px;
+    background:${color};
+    border-radius:${size[1]>size[0]*1.5?'2px':'50%'};
+    pointer-events:none;
+    z-index:10000;
+    transform:translate(-50%,-50%);
+    box-shadow:0 0 6px ${color}88;
+  `;
+  document.body.appendChild(el);
+
+  const startTime=performance.now()+delay;
+
+  function animate(now){
+    const elapsed=Math.max(0,now-startTime);
+    if(elapsed>duration){ el.remove(); return; }
+    const t=elapsed/duration;
+    const ease=1-Math.pow(t,2);
+    const gravity=200*t*t;
+    const x=cx+dx*t*ease;
+    const y=cy+dy*t*ease+gravity;
+    const opacity=t<0.1?t/0.1:1-Math.pow((t-0.1)/0.9,1.5);
+    const scale=t<0.1?t/0.1*1.2:1-t*0.4;
+    el.style.left=x+'px';
+    el.style.top=y+'px';
+    el.style.opacity=Math.max(0,opacity);
+    el.style.transform=`translate(-50%,-50%) scale(${scale}) rotate(${t*360}deg)`;
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(t=>{ if(t>=startTime) animate(t); else requestAnimationFrame(animate); });
+  setTimeout(()=>{ if(el.parentNode) el.remove(); }, delay+duration+100);
 }
 </script>
 </body>
